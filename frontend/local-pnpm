@@ -1,0 +1,3 @@
+#!/bin/bash
+# Local pnpm wrapper
+node /usr/local/bin/pnpm "$@"
