@@ -1,77 +1,144 @@
-# Minimal React 19 App Implementation Plan
+# React 19 App with Authentication Implementation Plan
 
 ## Project Overview
-Create the smallest possible React app using existing starter template with React 19, Vite, shadcn/ui, and Tailwind v4.
+Create a React app with authentication functionality using existing template with React 19, Vite, shadcn/ui, Tailwind v4, and React Router.
 
-## Single Page Implementation
+## Authentication Implementation
 
-### 1. Main App Component (`src/App.tsx`)
-**Purpose**: Single page displaying minimal content
+### 1. Login Page (`src/pages/LoginPage.tsx`)
+**Purpose**: User authentication with email and password
 **Features**:
-- Welcome message
-- Simple counter with increment/decrement buttons
-- Uses existing shadcn/ui Button component
+- Login form with email and password fields
+- Form validation using react-hook-form and zod
+- Error handling and loading states
+- Integration with existing auth service
+- Redirect to dashboard after successful login
 
 **Components Used**:
 - `@/components/ui/button` (existing)
 - `@/components/ui/card` (existing)
+- `@/components/ui/input` (existing)
+- `@/components/ui/label` (existing)
+- `@/components/ui/form` (existing)
 
-**Implementation**:
-- Replace existing placeholder content
-- Add React.useState for counter state
-- Style with existing Tailwind classes
+### 2. Dashboard Page (`src/pages/DashboardPage.tsx`)
+**Purpose**: Protected main application page
+**Features**:
+- Welcome message with user info
+- Simple counter functionality (from original app)
+- Logout functionality
+- Protected route requiring authentication
+
+### 3. App Component with Routing (`src/App.tsx`)
+**Purpose**: Main app with routing and authentication context
+**Features**:
+- React Router setup with protected routes
+- Authentication state management
+- Automatic redirection based on auth status
 
 ## Required Files
 
-### Core Files (Modify Existing)
-1. `src/App.tsx` - Main application component with counter functionality
+### New Files to Create
+1. `src/pages/LoginPage.tsx` - Login form component
+2. `src/pages/DashboardPage.tsx` - Main dashboard page
+3. `src/hooks/useAuth.ts` - Authentication hook
+4. `src/components/ProtectedRoute.tsx` - Route protection component
 
-### No Additional Files Needed
-- Uses existing shadcn/ui components
-- Uses existing Tailwind configuration
-- Uses existing Vite setup
-- No API calls required
-- No routing needed
-- No additional utils or types needed
+### Modified Files
+1. `src/App.tsx` - Add routing and authentication logic
+2. `src/lib/api.ts` - Implement login redirect TODOs
+3. `package.json` - Add react-router-dom dependency
+
+### Existing Files Used
+- `src/services/auth.ts` (existing auth service)
+- `src/types/user.ts` (existing type definitions)
+- `src/lib/api.ts` (existing API utilities)
+- All shadcn/ui components
 
 ## Technical Specifications
 
+### Authentication Flow
+- Login form validates credentials and calls authService.login
+- Successful login stores tokens and user data in localStorage
+- Protected routes check authentication status
+- Automatic token refresh using existing interceptors
+- Logout clears auth data and redirects to login
+
 ### State Management
-- Single `useState` hook for counter value
-- No external state management needed
+- Authentication state managed through custom useAuth hook
+- React Router for navigation state
+- Form state managed with react-hook-form
 
-### Styling
-- Tailwind utility classes only
-- Responsive design with existing breakpoints
-- Uses shadcn/ui component styling
+### Form Validation
+- Zod schema for login form validation
+- Real-time validation feedback
+- Error handling for API responses
 
-### Dependencies
-- All required dependencies already installed
-- No additional packages needed
+### Routing
+- Public routes: /login
+- Protected routes: / (dashboard)
+- Automatic redirects based on auth status
 
 ## Implementation Phases
 
-### Phase 1: Core Functionality
-- Update App.tsx with counter component
-- Add increment/decrement handlers
-- Style with shadcn/ui Card and Button components
+### Phase 1: Setup Dependencies
+- Install react-router-dom
+- Install react-hook-form and @hookform/resolvers/zod
+- Install zod for validation
 
-### Phase 2: Polish
-- Add responsive design
-- Ensure proper TypeScript types
-- Test functionality
+### Phase 2: Authentication Infrastructure
+- Create useAuth hook for auth state management
+- Create ProtectedRoute component
+- Update API with login redirects
+
+### Phase 3: Login Page
+- Create LoginPage component with form
+- Implement form validation and submission
+- Add error handling and loading states
+
+### Phase 4: Dashboard and Routing
+- Create DashboardPage component
+- Update App.tsx with React Router
+- Implement route protection
+
+### Phase 5: Integration
+- Test login/logout flow
+- Verify token refresh works
+- Test protected route access
 
 ## File Structure (Final)
 ```
 src/
-├── App.tsx (modified - main app component)
+├── App.tsx (modified - routing and auth)
 ├── main.tsx (existing - no changes)
-└── components/ui/ (existing - use Button and Card)
+├── pages/
+│   ├── LoginPage.tsx (new)
+│   └── DashboardPage.tsx (new)
+├── hooks/
+│   └── useAuth.ts (new)
+├── components/
+│   ├── ProtectedRoute.tsx (new)
+│   └── ui/ (existing components)
+├── services/
+│   └── auth.ts (existing - no changes)
+├── lib/
+│   └── api.ts (modified - implement TODOs)
+└── types/
+    └── user.ts (existing - no changes)
 ```
 
+## Dependencies to Add
+- react-router-dom
+- react-hook-form
+- @hookform/resolvers
+- zod
+
 ## Success Criteria
-- App displays welcome message
-- Counter increments/decrements on button clicks
-- Uses minimum possible code
-- Fully functional with existing setup
-- No additional dependencies or files needed
+- Users can login with email/password
+- Authentication state persists across page refreshes
+- Protected routes redirect unauthenticated users to login
+- Successful login redirects to dashboard
+- Logout functionality works correctly
+- Token refresh works automatically
+- Form validation provides helpful feedback
+- Responsive design works on all devices
